@@ -1,0 +1,39 @@
+name: Cloud PC AnyViewer (Pulpit i Pad)
+on: workflow_dispatch
+
+jobs:
+  run-pc:
+    runs-on: windows-latest
+    steps:
+      - name: 1. Instalacja Wirtualnej Grafiki i Kontrolera
+        shell: powershell
+        run: |
+          # Instalujemy oficjalny sterownik wirtualnego ekranu oraz ViGEmBus dla padów
+          winget install "IddSampleDriver" --accept-source-agreements --accept-package-agreements
+          winget install "ViGEmBus" --accept-source-agreements --accept-package-agreements
+
+      - name: 2. Pobieranie i instalacja AnyViewer
+        shell: powershell
+        run: |
+          # Pobieramy oficjalny instalator AnyViewer
+          Invoke-WebRequest -Uri "https://www.anyviewer.com/download/AnyViewerSetup.exe" -OutFile "anyviewer_setup.exe"
+          # Cicha instalacja
+          Start-Process -FilePath ".\anyviewer_setup.exe" -ArgumentList "/S" -Wait
+
+      - name: 3. Logowanie i uruchomienie serwera
+        shell: powershell
+        run: |
+          cd "C:\Program Files (x86)\AnyViewer"
+          
+          # PODMIEŃ PONIŻSZE DANE NA SWOJE KONTO Z APLIKACJI MOBILNEJ:
+          $email = "TUTAJ_TWÓJ_EMAIL"
+          $password = "TUTAJ_TWOJE_HASŁO"
+          
+          # Logujemy maszyne na Twoje konto przez wbudowane polecenia
+          Start-Process -FilePath ".\AnyViewer.exe" -ArgumentList "/login", $email, $password
+          Write-Host "Maszyna zostala przypisana do Twojego konta AnyViewer!"
+
+      - name: 4. Podtrzymanie sesji (Maksimum RAM)
+        shell: powershell
+        run: Start-Sleep -Seconds 20000
+        
