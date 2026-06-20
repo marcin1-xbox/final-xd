@@ -1,4 +1,4 @@
-name: Cloud PC AnyViewer (Poprawiony)
+name: Cloud PC AnyViewer (Gotowy)
 on: workflow_dispatch
 
 jobs:
@@ -14,7 +14,6 @@ jobs:
       - name: 2. Pobieranie i instalacja AnyViewer
         shell: powershell
         run: |
-          # Poprawiony adres URL pobierania
           Invoke-WebRequest -Uri "https://dl.anyviewer.com/AnyViewerSetup.exe" -OutFile "anyviewer_setup.exe"
           Start-Process -FilePath ".\anyviewer_setup.exe" -ArgumentList "/S" -Wait
 
@@ -23,14 +22,13 @@ jobs:
         run: |
           cd "C:\Program Files (x86)\AnyViewer"
           
-          # TUTAJ WPISZ SWÓJ ADRES EMAIL I HASŁO DO KONTA ANYVIEWER:
-          $email = "TUTAJ_TWÓJ_EMAIL"
-          $password = "TUTAJ_TWOJE_HASŁO"
+          # Automatyczne logowanie na Twoje konto
+          $email = "Robloxqwru@gmail.com"
+          $password = "termi4231"
           
           Start-Process -FilePath ".\AnyViewer.exe" -ArgumentList "/login", $email, $password
-          Write-Host "Maszyna poprawnie zalogowana i gotowa do sterowania padem!"
+          Write-Host "Zalogowano pomyslnie na: $email"
 
-      - name: 4. Podtrzymanie sesji (Maksimum RAM)
+      - name: 4. Podtrzymanie sesji
         shell: powershell
         run: Start-Sleep -Seconds 20000
-        
